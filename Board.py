@@ -40,7 +40,7 @@ class GameBoard:
         board = []
         try:
             with open(filename, mode='r', newline='') as file:
-                reader = csv.reader(filename)
+                reader = csv.reader(file, delimiter=' ')
                 for row in reader:
                     board.append([int(value) for value in row])
         except Exception as e:
