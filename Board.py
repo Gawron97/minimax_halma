@@ -3,13 +3,14 @@
 import csv
 import random
 from Heuristics import *
+from Player import Player
 
 
 class GameBoard:
     def __init__(self, filename = None) -> None:
         self.size = 16
         if(filename):
-            self.board: list[list] = self.initialize_board_from_csv()
+            self.board: list[list] = self.initialize_board_from_csv(filename)
         else:
             self.board: list[list] = self.initialize_random_board()
         
@@ -92,18 +93,19 @@ class GameBoard:
                 print(f'{self.board[i][j]}  ', end='')
             print()
 
-    def get_possible_moves(self, player):
+    def get_possible_moves(self, player_number):
         moves = []
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
         for x in range(self.size):
             for y in range(self.size):
-                if(self.board[x][y] == player):
+                if(self.board[x][y] == player_number):
                     for dx, dy in directions:
                         nx, ny = x + dx, y + dy
                         if(0 <= nx < self.size and 0 <= ny < self.size and self.board[nx][ny] == 0):
                             moves.append((x, y, nx, ny))
 
+        random.shuffle(moves)
         return moves
     
     def is_no_more_possible_moves(self):
@@ -120,12 +122,14 @@ class GameBoard:
         self.board[start_x][start_y] = self.board[end_x][end_y]
         self.board[end_x][end_y] = 0
 
-    def get_score(self, player, heura_name = "simple"):
-        match(heura_name):
+    def get_score(self, player: Player) -> float:
+        match(player.actual_strategy):
             case "simple":
-                simple_score(self.board, player)
+                return simple_score(self.board, player)
+            case "rand":
+                return rand()
             case _:
-                simple_score(self.board, player)
+                return simple_score(self.board, player)
         
 
 
