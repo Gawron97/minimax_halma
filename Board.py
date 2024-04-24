@@ -87,8 +87,27 @@ class GameBoard:
                 return False
         return True
 
+    def display_board_with_cells(self):
+        print("      " + "     ".join(str(x) for x in range(10)), end='')
+        print("    " + "    ".join(str(x) for x in range(10, self.size)))
+        print()
+        print("   +" + "-----+" * self.size)
+        for i in range(self.size):        
+            print(f'{i:2} ', end='  ')    
+            for j in range(self.size):
+                if(self.board[i][j] == 0):
+                    print(f' . ', end=' | ')
+                else:    
+                    print(f' {self.board[i][j]} ', end=' | ')
+            print(f'  {i}')
+            print("   +" + "-----+" * self.size)
+        print()
+        print("      " + "     ".join(str(x) for x in range(10)), end='')
+        print("    " + "    ".join(str(x) for x in range(10, self.size)))
+        print()
+
     def display_board(self):
-        print("     " + "   ".join(str(x) for x in range(10)), end='')
+        print("      " + "   ".join(str(x) for x in range(10)), end='')
         print("  " + "  ".join(str(x) for x in range(10, self.size)))
         print()
         for i in range(self.size):        
@@ -100,7 +119,7 @@ class GameBoard:
                     print(f' {self.board[i][j]} ', end=' ')
             print(f'  {i}')
         print()
-        print("     " + "   ".join(str(x) for x in range(10)), end='')
+        print("      " + "   ".join(str(x) for x in range(10)), end='')
         print("  " + "  ".join(str(x) for x in range(10, self.size)))
         print()
 
