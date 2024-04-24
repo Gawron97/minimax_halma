@@ -88,14 +88,43 @@ class GameBoard:
         return True
 
     def display_board(self):
-        for i in range(self.size):            
+        print("     " + "   ".join(str(x) for x in range(10)), end='')
+        print("  " + "  ".join(str(x) for x in range(10, self.size)))
+        print()
+        for i in range(self.size):        
+            print(f'{i:2} ', end='  ')    
             for j in range(self.size):
-                print(f'{self.board[i][j]}  ', end='')
-            print()
+                if(self.board[i][j] == 0):
+                    print(f' . ', end=' ')
+                else:    
+                    print(f' {self.board[i][j]} ', end=' ')
+            print(f'  {i}')
+        print()
+        print("     " + "   ".join(str(x) for x in range(10)), end='')
+        print("  " + "  ".join(str(x) for x in range(10, self.size)))
+        print()
+
+    def find_jumps(self, x, y, visited: set):
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+        jumps = []
+        visited.add((x, y))
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if(0 <= nx < self.size and 0 <= ny < self.size and self.board[nx][ny] != 0):
+                jump_x, jump_y = nx + dx, ny + dy
+                if(0 <= jump_x < self.size and 0 <= jump_y < self.size and self.board[jump_x][jump_y] == 0):
+                    if((jump_x, jump_y) not in visited):
+                        visited.add((jump_x, jump_y))
+                        jumps.append((x, y, jump_x, jump_y))
+                        jumps.extend(self.find_jumps(jump_x, jump_y, visited))
+        return jumps
+                    
+
 
     def get_possible_moves(self, player_number):
         moves = []
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
 
         for x in range(self.size):
             for y in range(self.size):
@@ -104,6 +133,8 @@ class GameBoard:
                         nx, ny = x + dx, y + dy
                         if(0 <= nx < self.size and 0 <= ny < self.size and self.board[nx][ny] == 0):
                             moves.append((x, y, nx, ny))
+                    moves.extend(self.find_jumps(x, y, set()))
+                                
 
         random.shuffle(moves)
         return moves
