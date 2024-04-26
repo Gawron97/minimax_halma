@@ -14,8 +14,8 @@ class GameBoard:
         else:
             self.board: list[list] = self.initialize_random_board()
         
-        self.player1_zone: list[tuple] = self.get_player1_zone()
-        self.player2_zone: list[tuple] = self.get_player2_zone()
+        self.player1_zone: list[tuple] = self.get_player1_zone_test()
+        self.player2_zone: list[tuple] = self.get_player2_zone_test()
 
         self.display_board()
 
@@ -62,6 +62,22 @@ class GameBoard:
         for i in range(0, 6):
             for j in range(10 + i, 16):
                 zone.append((i, j))
+        return zone
+    
+    def get_player1_zone_test(self):
+        zone: list[tuple] = []
+        for i in range(12, 16):
+            for j in range(0, i - 12  + 1):
+                zone.append((i, j))
+        print(zone)
+        return zone
+
+    def get_player2_zone_test(self):
+        zone: list[tuple] = []
+        for i in range(0, 4):
+            for j in range(12 + i, 16):
+                zone.append((i, j))
+        print(zone)
         return zone
     
     def check_player1_win(self):

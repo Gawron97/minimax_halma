@@ -1,6 +1,7 @@
 
 from Board import *
 from Player import Player
+from Node import Node
 
 def minmax(board: GameBoard, depth: int, current_player: Player, starting_player: Player, enemy: Player) -> float:
     # print("Board on start processing algorithm")
@@ -120,3 +121,109 @@ def minmax_alfabeta(board: GameBoard, depth: int, current_player: Player, starti
                 break
         
         return (min_score, min_move)
+    
+def minmax_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, node: Node) -> float:
+    if(depth == 0 or node.board.is_no_more_possible_moves()):
+        return (node.board.get_score(starting_player), None)
+    
+    if(node.board.check_player_win(starting_player.player_number)):
+        return (float('inf'), None)
+    
+    if(node.board.check_player_win(enemy.player_number)):
+        return (float('inf'), None)
+    
+    node.expand_moves(current_player.player_number)
+    
+    if(current_player == starting_player):
+        max_score = float('-inf')
+
+        for child in node.children:
+            score, previuos_best_node = minmax_exp(
+                depth - 1,
+                enemy,
+                starting_player,
+                enemy,
+                child
+            )
+            if(score > max_score):
+                max_score = score
+                node.best_child = child
+                node.score = max_score
+
+        return (max_score, node.best_child)
+    
+    else:
+        min_score = float('inf')
+
+        for child in node.children:
+            score, previous_min_node = minmax_exp(
+                depth - 1,
+                starting_player,
+                starting_player,
+                enemy,
+                child
+            )
+            if(score < min_score):
+                min_score = score
+                node.min_child = child
+                node.score = min_score
+
+        return (min_score, node.min_child)
+
+    
+def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, alpha: float, beta: float, node: Node) -> float:
+    if(depth == 0 or node.board.is_no_more_possible_moves()):
+        return (node.board.get_score(starting_player), None)
+    
+    if(node.board.check_player_win(starting_player.player_number)):
+        return (float('inf'), None)
+    
+    if(node.board.check_player_win(enemy.player_number)):
+        return (float('inf'), None)
+    
+    node.expand_moves(current_player.player_number)
+    
+    if(current_player == starting_player):
+        max_score = float('-inf')
+
+        for child in node.children:
+            score, previuos_best_node = minmax_alfabeta_exp(
+                depth - 1,
+                enemy,
+                starting_player,
+                enemy,
+                alpha,
+                beta,
+                child
+            )
+            if(score > max_score):
+                max_score = score
+                node.best_child = child
+                node.score = max_score
+            alpha = max(alpha, score)
+            if(beta <= alpha):
+                break
+        return (max_score, node.best_child)
+    
+    else:
+        min_score = float('inf')
+
+        for child in node.children:
+            score, previous_min_node = minmax_alfabeta_exp(
+                depth - 1,
+                starting_player,
+                starting_player,
+                enemy,
+                alpha,
+                beta,
+                child
+            )
+            if(score < min_score):
+                min_score = score
+                node.min_child = child
+                node.score = min_score
+            beta = min(beta, score)
+            if(beta <= alpha):
+                break
+        return (min_score, node.min_child)
+    
