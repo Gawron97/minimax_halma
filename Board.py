@@ -123,7 +123,7 @@ class GameBoard:
         print("  " + "  ".join(str(x) for x in range(10, self.size)))
         print()
 
-    def find_jumps(self, x, y, visited: set):
+    def find_jumps(self, x, y, visited: set, initial_x, initial_y):
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
         jumps = []
         visited.add((x, y))
@@ -135,8 +135,8 @@ class GameBoard:
                 if(0 <= jump_x < self.size and 0 <= jump_y < self.size and self.board[jump_x][jump_y] == 0):
                     if((jump_x, jump_y) not in visited):
                         visited.add((jump_x, jump_y))
-                        jumps.append((x, y, jump_x, jump_y))
-                        jumps.extend(self.find_jumps(jump_x, jump_y, visited))
+                        jumps.append((initial_x, initial_y, jump_x, jump_y))
+                        jumps.extend(self.find_jumps(jump_x, jump_y, visited, x, y))
         return jumps
                     
 
@@ -152,7 +152,7 @@ class GameBoard:
                         nx, ny = x + dx, y + dy
                         if(0 <= nx < self.size and 0 <= ny < self.size and self.board[nx][ny] == 0):
                             moves.append((x, y, nx, ny))
-                    moves.extend(self.find_jumps(x, y, set()))
+                    moves.extend(self.find_jumps(x, y, set(), x, y))
                                 
 
         random.shuffle(moves)
@@ -178,9 +178,14 @@ class GameBoard:
                 return simple_score(self.board, player)
             case "rand":
                 return rand()
+            case "density":
+                return density(self.board, player)
+            case "closer_to_enemy_base":
+                return closer_to_enemy_base(self.board, player)
+            case "density_and_closer_to_enemy_base":
+                return density_and_closer_to_enemy_base(self.board, player)
             case _:
                 return simple_score(self.board, player)
         
 
 
-GameBoard()
