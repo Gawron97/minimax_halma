@@ -227,3 +227,83 @@ def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Pla
                 break
         return (min_score, node.min_child)
     
+
+
+# ta wersja nie ma zadnego sensu, bo ewaluujemy cala gre, czyli wszystkie mozliwosci. Lepiej ewaluowac kilka krokow na przod
+# zapisac drzewo i potem zewaluowac od miejsca gdzie rzeczywiscie wykonalismy ruch, wtedy ucinamy sprawdzanie innych drog
+def minmax_alfabeta_moves(board: GameBoard, depth: int, current_player: Player, starting_player: Player, enemy: Player, alpha: float, beta: float) -> float:
+    # print("Board on start processing algorithm")
+    # board.display_board()
+    if(depth == 0 or board.is_no_more_possible_moves()):
+        return (board.get_score(starting_player), [], [])
+
+    if(board.check_player_win(starting_player.player_number)):
+        return (float('inf'), [], [])
+    
+    if(board.check_player_win(enemy.player_number)):
+        return (float('-inf'), [], [])
+    
+    best_moves = []
+    min_moves = []
+    
+    if(current_player == starting_player):
+        max_score = float('-inf')
+        best_move = None
+        possible_moves = board.get_possible_moves(current_player.player_number)
+        
+        previous_best_moves = []
+        for move in possible_moves:
+            board.make_move(move)
+            score, potential_best_moves, potential_min_moves = minmax_alfabeta_moves(
+                board,
+                depth - 1,
+                enemy,
+                starting_player,
+                enemy,
+                alpha,
+                beta,
+            )
+            # print(f'Score for starting player: {starting_player.player_number} || score: {score}')
+            board.undo_move(move)
+            if(score > max_score):
+                max_score = score
+                best_move = move
+                previous_best_moves = potential_best_moves
+            alpha = max(alpha, score)
+            if(beta <= alpha):
+                break
+        best_moves.extend(previous_best_moves)
+        best_moves.append(best_move)
+        min_moves = potential_min_moves
+        return (max_score, best_moves, min_moves)
+
+    else:
+        min_score = float('inf')
+        min_move = None
+        possible_moves = board.get_possible_moves(current_player.player_number)
+        
+        previous_min_moves = []
+        for move in possible_moves:
+            board.make_move(move)
+            score, potential_best_moves, potential_min_moves = minmax_alfabeta_moves(
+                board,
+                depth - 1,
+                starting_player,
+                starting_player,
+                enemy,
+                alpha,
+                beta,
+            )
+            # print(f'Score for enemy player: {enemy.player_number} || score: {score}')
+            board.undo_move(move)
+            if(score < min_score):
+                min_score = score
+                min_move = move
+                previous_min_moves = potential_min_moves
+            beta = min(beta, score)
+            if(beta <= alpha):
+                break
+        min_moves.extend(previous_min_moves)
+        min_moves.append(min_move)
+        best_moves = potential_best_moves
+        return (min_score, best_moves, min_moves)
