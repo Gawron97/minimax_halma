@@ -3,7 +3,7 @@
 import csv
 import random
 from Heuristics import *
-from Player import Player
+from Player import *
 
 
 class GameBoard:
@@ -200,6 +200,8 @@ class GameBoard:
                 return closer_to_enemy_base(self.board, player)
             case "density_and_closer_to_enemy_base":
                 return density_and_closer_to_enemy_base(self.board, player)
+            case "more_moves_strategy":
+                return more_moves_strategy(self.board, player, self.get_possible_moves)
             case _:
                 return simple_score(self.board, player)
         

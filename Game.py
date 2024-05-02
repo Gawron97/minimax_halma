@@ -1,7 +1,6 @@
 
 from copy import deepcopy
 import time
-from Board import *
 from MinMax import *
 
 class Game:
@@ -63,8 +62,10 @@ class Game:
         current_node = self.root
         current_player1: Player = starting_player
         current_player2: Player = enemy
+        round = 0
 
-        while(not current_node.board.is_no_more_possible_moves()):
+        while(True):
+            round += 1
             start_time = time.time()
 
             if(current_node.board.check_player_win(starting_player.player_number)):
@@ -73,6 +74,12 @@ class Game:
             if(current_node.board.check_player_win(enemy.player_number)):
                 print(f'Player_{enemy.player_number} win')
                 return
+            
+            if(round == 20 or round == 40 or round == 60):
+                current_player1.update_actual_strategy()
+                current_player2.update_actual_strategy()
+                print(f'player_{current_player1.player_number} strategy: {current_player1.actual_strategy}')
+                print(f'player_{current_player2.player_number} strategy: {current_player2.actual_strategy}')
             
             current_node = self.find_best_move_for_player_exp(current_player1, current_player2, depth, algorithm_name, current_node)
             del current_node.parent

@@ -123,7 +123,7 @@ def minmax_alfabeta(board: GameBoard, depth: int, current_player: Player, starti
         return (min_score, min_move)
     
 def minmax_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, node: Node) -> float:
-    if(depth == 0 or node.board.is_no_more_possible_moves()):
+    if(depth == 0):
         return (node.board.get_score(starting_player), None)
     
     if(node.board.check_player_win(starting_player.player_number)):
@@ -133,6 +133,9 @@ def minmax_exp(depth: int, current_player: Player, starting_player: Player, enem
         return (float('inf'), None)
     
     node.expand_moves(current_player.player_number)
+
+    if(len(node.children) == 0):
+        return (node.board.get_score(starting_player), None)
     
     if(current_player == starting_player):
         max_score = float('-inf')
@@ -172,7 +175,7 @@ def minmax_exp(depth: int, current_player: Player, starting_player: Player, enem
 
     
 def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, alpha: float, beta: float, node: Node) -> float:
-    if(depth == 0 or node.board.is_no_more_possible_moves()):
+    if(depth == 0):
         return (node.board.get_score(starting_player), None)
     
     if(node.board.check_player_win(starting_player.player_number)):
@@ -182,6 +185,9 @@ def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Pla
         return (float('inf'), None)
     
     node.expand_moves(current_player.player_number)
+
+    if(len(node.children) == 0):
+        return (node.board.get_score(starting_player), None)
     
     if(current_player == starting_player):
         max_score = float('-inf')
@@ -225,6 +231,69 @@ def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Pla
             beta = min(beta, score)
             if(beta <= alpha):
                 break
+        return (min_score, node.min_child)
+    
+
+# to jest tak naprawde jakbym wywolal bez patrzenia na przod. Bo jesli juz mam zewaluowane 2 najlepsze ruchy, to nie mam alternatyw i
+# dla tego ruchu wywolam kolejna glebokosc, i jedyne jaki bedzie efekt to zachowam najlepszy lisc, ale on nie spojrzal na przod
+def minmax_alfabeta_remember_only_best_move(depth: int, current_player: Player, starting_player: Player, enemy: Player, alpha: float, beta: float, node: Node):
+    if(depth == 0 or node.board.is_no_more_possible_moves()):
+        return (node.board.get_score(starting_player), None)
+    
+    if(node.board.check_player_win(starting_player.player_number)):
+        return (float('inf'), None)
+    
+    if(node.board.check_player_win(enemy.player_number)):
+        return (float('inf'), None)
+    
+    node.expand_moves(current_player.player_number)
+    
+    if(current_player == starting_player):
+        max_score = float('-inf')
+
+        for child in node.children:
+            score, previuos_best_node = minmax_alfabeta_exp(
+                depth - 1,
+                enemy,
+                starting_player,
+                enemy,
+                alpha,
+                beta,
+                child
+            )
+            if(score > max_score):
+                max_score = score
+                node.best_child = child
+                node.score = max_score
+            alpha = max(alpha, score)
+            if(beta <= alpha):
+                break
+            node.children.remove(child)
+        node.children.append(node.best_child)
+        return (max_score, node.best_child)
+    
+    else:
+        min_score = float('inf')
+
+        for child in node.children:
+            score, previous_min_node = minmax_alfabeta_exp(
+                depth - 1,
+                starting_player,
+                starting_player,
+                enemy,
+                alpha,
+                beta,
+                child
+            )
+            if(score < min_score):
+                min_score = score
+                node.min_child = child
+                node.score = min_score
+            beta = min(beta, score)
+            if(beta <= alpha):
+                break
+            node.children.remove(child)
+        node.children.append(node.min_child)
         return (min_score, node.min_child)
     
 
