@@ -202,6 +202,8 @@ class GameBoard:
                 return density_and_closer_to_enemy_base(self.board, player)
             case "more_moves_strategy":
                 return more_moves_strategy(self.board, player, self.get_possible_moves)
+            case "more_moves_and_closer_to_enemy_base":
+                return more_moves_and_closer_to_enemy_base(self.board, player)
             case _:
                 return simple_score(self.board, player)
         

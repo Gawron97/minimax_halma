@@ -70,23 +70,27 @@ class Game:
 
             if(current_node.board.check_player_win(starting_player.player_number)):
                 print(f'Player_{starting_player.player_number} win')
+                starting_player.isWin = True
                 return 
             if(current_node.board.check_player_win(enemy.player_number)):
                 print(f'Player_{enemy.player_number} win')
+                enemy.isWin = True
                 return
             
-            if(round == 20 or round == 40 or round == 60):
+            if(round == 20):
                 current_player1.update_actual_strategy()
                 current_player2.update_actual_strategy()
-                print(f'player_{current_player1.player_number} strategy: {current_player1.actual_strategy}')
-                print(f'player_{current_player2.player_number} strategy: {current_player2.actual_strategy}')
+                print(f'player_{current_player1.player_number} strategy: {current_player1.actual_strategy} ratio: {current_player1.strategy_ratio}')
+                print(f'player_{current_player2.player_number} strategy: {current_player2.actual_strategy} ratio: {current_player1.strategy_ratio}')
+                round = 0
             
             current_node = self.find_best_move_for_player_exp(current_player1, current_player2, depth, algorithm_name, current_node)
-            del current_node.parent
+            self.delete_useless_nodes(current_node)
 
             if(current_node.move):
                 current_node.board.display_board()
                 print(f'player_{current_player1.player_number} {current_node.move}')
+                print(f'round: {round}')
             else:
                 print(f'No more moves for player_{current_player1.player_number}')
                 break
@@ -104,3 +108,9 @@ class Game:
             (max_score, best_node) = minmax_exp(depth, current_player, current_player, enemy, current_node)
 
         return best_node
+    
+    def delete_useless_nodes(self, node: Node):
+        node.parent.children.remove(node)
+        for child in node.parent.children:
+            child.delete_node()
+        del node.parent

@@ -16,7 +16,7 @@ def simple_score(board: list[list], player: Player) -> float:
     return score
 
 def rand():
-    return random.randint(-10, 10)
+    return random.random()
 
 #0 - 8 * ilosc pionkow
 def density(board: list[list], player: Player) -> float:
@@ -31,9 +31,9 @@ def density(board: list[list], player: Player) -> float:
                     if(0 <= nx < len(board) and 0 <= ny < len(board)):
                         if(board[nx][ny] == player.player_number):
                             score += 1
-    return score
+    return score / (8 * 10)
 
-#0 - 2.7 * ilosc pionkow
+#0 - 5.47 * ilosc pionkow
 def closer_to_enemy_base(board: list[list], player: Player) -> float:
     score = 0
     if(player.player_number == 1):
@@ -54,13 +54,15 @@ def closer_to_enemy_base(board: list[list], player: Player) -> float:
                     distance = sqrt(abs(rows_distance)) + sqrt(abs(columns_distance))
                     score += distance
 
-    return score
+    return score / (5.47 * 10)
 
 def density_and_closer_to_enemy_base(board: list[list], player: Player) -> float:
-    return density(board, player) + (closer_to_enemy_base(board, player) * 5)
+    first_weight = (100 - player.strategy_ratio) / 100
+    second_weight = player.strategy_ratio / 100
+    return (density(board, player) * first_weight) + (closer_to_enemy_base(board, player) * second_weight)
 
 
-# 0 - ~280
+# 0 - ~16 * ilosc pionkow
 def more_moves_strategy(board: list[list], player: Player, get_possible_moves) -> float:
 
     score = 0
@@ -70,5 +72,9 @@ def more_moves_strategy(board: list[list], player: Player, get_possible_moves) -
             if(board[x][y] == player.player_number):
                 score += len(get_possible_moves(player.player_number))
 
-    return score
+    return score / (16 * 10)
     
+def more_moves_and_closer_to_enemy_base(board: list[list], player: Player) -> float:
+    first_weight = (100 - player.strategy_ratio) / 100
+    second_weight = player.strategy_ratio / 100
+    return (more_moves_strategy(board, player) * first_weight) + (closer_to_enemy_base(board, player) * second_weight)
