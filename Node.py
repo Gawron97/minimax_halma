@@ -1,7 +1,6 @@
 from copy import deepcopy
 from Board import GameBoard
 
-
 class Node:
     def __init__(self, board, parent = None, move = None) -> None:
         self.board: GameBoard = board

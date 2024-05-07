@@ -57,7 +57,6 @@ def minmax(board: GameBoard, depth: int, current_player: Player, starting_player
         
         return (min_score, min_move)
 
-
 def minmax_alfabeta(board: GameBoard, depth: int, current_player: Player, starting_player: Player, enemy: Player, alpha: float, beta: float) -> float:
     # print("Board on start processing algorithm")
     # board.display_board()
@@ -122,85 +121,91 @@ def minmax_alfabeta(board: GameBoard, depth: int, current_player: Player, starti
         
         return (min_score, min_move)
     
-def minmax_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, node: Node) -> float:
+def minmax_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, node: Node, visited_nodes: float):
+    visited_nodes += 1
     if(depth == 0):
-        return (node.board.get_score(starting_player), None)
+        return (node.board.get_score(starting_player), None, visited_nodes)
     
     if(node.board.check_player_win(starting_player.player_number)):
-        return (float('inf'), None)
+        return (float('inf'), None, visited_nodes)
     
     if(node.board.check_player_win(enemy.player_number)):
-        return (float('inf'), None)
+        return (float('inf'), None, visited_nodes)
     
     node.expand_moves(current_player.player_number)
 
     if(len(node.children) == 0):
-        return (node.board.get_score(starting_player), None)
+        return (node.board.get_score(starting_player), None, visited_nodes)
     
     if(current_player == starting_player):
         max_score = float('-inf')
 
         for child in node.children:
-            score, previuos_best_node = minmax_exp(
+            score, previuos_best_node, visited_nodes = minmax_exp(
                 depth - 1,
                 enemy,
                 starting_player,
                 enemy,
-                child
+                child,
+                visited_nodes
             )
             if(score > max_score):
                 max_score = score
                 node.best_child = child
                 node.score = max_score
 
-        return (max_score, node.best_child)
+        return (max_score, node.best_child, visited_nodes)
     
     else:
         min_score = float('inf')
 
         for child in node.children:
-            score, previous_min_node = minmax_exp(
+            score, previous_min_node, visited_nodes = minmax_exp(
                 depth - 1,
                 starting_player,
                 starting_player,
                 enemy,
-                child
+                child,
+                visited_nodes
             )
             if(score < min_score):
                 min_score = score
                 node.min_child = child
                 node.score = min_score
 
-        return (min_score, node.min_child)
+        return (min_score, node.min_child, visited_nodes)
 
-    
-def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, alpha: float, beta: float, node: Node) -> float:
+
+def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Player, enemy: Player, alpha: float, beta: float, node: Node,
+                        visited_nodes: float):
+    visited_nodes += 1
     if(depth == 0):
-        return (node.board.get_score(starting_player), None)
+        return (node.board.get_score(starting_player), None, visited_nodes)
     
     if(node.board.check_player_win(starting_player.player_number)):
-        return (float('inf'), None)
+        return (float('inf'), None, visited_nodes)
     
     if(node.board.check_player_win(enemy.player_number)):
-        return (float('inf'), None)
+        return (float('inf'), None, visited_nodes)
     
     node.expand_moves(current_player.player_number)
 
     if(len(node.children) == 0):
-        return (node.board.get_score(starting_player), None)
+        return (node.board.get_score(starting_player), None, visited_nodes)
     
     if(current_player == starting_player):
         max_score = float('-inf')
 
         for child in node.children:
-            score, previuos_best_node = minmax_alfabeta_exp(
+            score, previuos_best_node, visited_nodes = minmax_alfabeta_exp(
                 depth - 1,
                 enemy,
                 starting_player,
                 enemy,
                 alpha,
                 beta,
-                child
+                child,
+                visited_nodes
             )
             if(score > max_score):
                 max_score = score
@@ -209,20 +214,21 @@ def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Pla
             alpha = max(alpha, score)
             if(beta <= alpha):
                 break
-        return (max_score, node.best_child)
+        return (max_score, node.best_child, visited_nodes)
     
     else:
         min_score = float('inf')
 
         for child in node.children:
-            score, previous_min_node = minmax_alfabeta_exp(
+            score, previous_min_node, visited_nodes = minmax_alfabeta_exp(
                 depth - 1,
                 starting_player,
                 starting_player,
                 enemy,
                 alpha,
                 beta,
-                child
+                child,
+                visited_nodes
             )
             if(score < min_score):
                 min_score = score
@@ -231,7 +237,7 @@ def minmax_alfabeta_exp(depth: int, current_player: Player, starting_player: Pla
             beta = min(beta, score)
             if(beta <= alpha):
                 break
-        return (min_score, node.min_child)
+        return (min_score, node.min_child, visited_nodes)
     
 
 # to jest tak naprawde jakbym wywolal bez patrzenia na przod. Bo jesli juz mam zewaluowane 2 najlepsze ruchy, to nie mam alternatyw i

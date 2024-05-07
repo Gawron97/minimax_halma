@@ -14,8 +14,8 @@ class GameBoard:
         else:
             self.board: list[list] = self.initialize_random_board()
         
-        self.player1_zone: list[tuple] = self.get_player1_zone_test()
-        self.player2_zone: list[tuple] = self.get_player2_zone_test()
+        self.player1_zone: list[tuple] = self.get_player1_zone()
+        self.player2_zone: list[tuple] = self.get_player2_zone()
 
         self.display_board()
 
@@ -152,7 +152,7 @@ class GameBoard:
                     if((jump_x, jump_y) not in visited):
                         visited.add((jump_x, jump_y))
                         jumps.append((initial_x, initial_y, jump_x, jump_y))
-                        jumps.extend(self.find_jumps(jump_x, jump_y, visited, x, y))
+                        jumps.extend(self.find_jumps(jump_x, jump_y, visited, initial_x, initial_y))
         return jumps
                     
 
@@ -196,14 +196,24 @@ class GameBoard:
                 return rand()
             case "density":
                 return density(self.board, player)
+            case "all_density":
+                return all_density(self.board, player)
             case "closer_to_enemy_base":
-                return closer_to_enemy_base(self.board, player)
+                return closer_to_enemy_base(self.board, player, self.player1_zone, self.player2_zone)
             case "density_and_closer_to_enemy_base":
-                return density_and_closer_to_enemy_base(self.board, player)
+                return density_and_closer_to_enemy_base(self.board, player, self.player1_zone, self.player2_zone)
+            case "all_density_and_closer_to_enemy_base":
+                return all_density_and_closer_to_enemy_base(self.board, player, self.player1_zone, self.player2_zone)
             case "more_moves_strategy":
                 return more_moves_strategy(self.board, player, self.get_possible_moves)
             case "more_moves_and_closer_to_enemy_base":
-                return more_moves_and_closer_to_enemy_base(self.board, player)
+                return more_moves_and_closer_to_enemy_base(self.board, player, self.get_possible_moves, self.player1_zone, self.player2_zone)
+            case "more_jumps":
+                return more_jumps(self.board, player, self.find_jumps)
+            case "more_jumps_and_closer_to_enemy_base":
+                return more_jumps_and_closer_to_enemy_base(self.board, player, self.find_jumps, self.player1_zone, self.player2_zone)
+            case "width_and_closer_to_enemy_base":
+                return width_and_closer_to_enemy_base(self.board, player, self.player1_zone, self.player2_zone)
             case _:
                 return simple_score(self.board, player)
         
