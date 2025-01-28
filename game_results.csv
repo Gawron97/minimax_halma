@@ -1,0 +1,26 @@
+Winner,Winner Strategies,Winner Playing Time,Looser,Looser Strategies,Looser Playing Time
+player2,"[('closer_to_enemy_base', 50)]",687.9275968074799,player1,"[('rand', 50)]",2628.4559938907623
+player1,"[('closer_to_enemy_base', 50)]",394.04852771759033,player2,"[('density_and_closer_to_enemy_base', 50)]",461.7049067020416
+player1,"[('closer_to_enemy_base', 50)]",465.9210247993469,player2,"[('density_and_closer_to_enemy_base', 90)]",543.1969609260559
+player1,"[('closer_to_enemy_base', 50)]",315.71105003356934,player2,"[('density_and_closer_to_enemy_base', 80)]",412.33003187179565
+player1,"[('more_jumps_and_closer_to_enemy_base', 80)]",77.95067000389099,player2,"[('density_and_closer_to_enemy_base', 80)]",73.50247478485107
+player1,"[('more_jumps_and_closer_to_enemy_base', 80)]",980.6989641189575,player2,"[('density_and_closer_to_enemy_base', 80)]",489.9489858150482
+player2,"[('density_and_closer_to_enemy_base', 90)]",460.3836796283722,player1,"[('more_jumps_and_closer_to_enemy_base', 60)]",1872.3904480934143
+player1,"[('more_jumps_and_closer_to_enemy_base', 80)]",63.78362202644348,player2,"[('closer_to_enemy_base', 50)]",58.53278207778931
+player2,"[('closer_to_enemy_base', 50)]",981.0068290233612,player1,"[('more_jumps_and_closer_to_enemy_base', 80)]",1113.7490060329437
+player2,"[('closer_to_enemy_base', 90)]",557.224413394928,player1,"[('density_and_closer_to_enemy_base', 90)]",563.4140069484711
+player2,"[('closer_to_enemy_base', 90)]",391.5436761379242,player1,"[('density_and_closer_to_enemy_base', 80)]",401.2148621082306
+player2,"[('more_jumps_and_closer_to_enemy_base', 80)]",531.2086639404297,player1,"[('density_and_closer_to_enemy_base', 80)]",259.30683302879333
+player1,"[('density_and_closer_to_enemy_base', 85)]",315.0624806880951,player2,"[('more_jumps_and_closer_to_enemy_base', 70)]",497.54788398742676
+player2,"[('more_jumps_and_closer_to_enemy_base', 85)]",423.1742911338806,player1,"[('density_and_closer_to_enemy_base', 70)]",287.7709903717041
+player2,"[('more_jumps_and_closer_to_enemy_base', 80)]",399.772221326828,player1,"[('closer_to_enemy_base', 70)]",207.42713475227356
+player2,"[('more_jumps_and_closer_to_enemy_base', 90)]",384.8537018299103,player1,"[('closer_to_enemy_base', 70)]",265.3073196411133
+player2,"[('all_density_and_closer_to_enemy_base', 80)]",440.0384056568146,player1,"[('closer_to_enemy_base', 70)]",279.7315933704376
+player2,"[('all_density_and_closer_to_enemy_base', 70)]",543.0344545841217,player1,"[('closer_to_enemy_base', 70)]",329.0112290382385
+player1,"[('more_jumps_and_closer_to_enemy_base', 80)]",608.4462435245514,player2,"[('all_density_and_closer_to_enemy_base', 80)]",449.82824754714966
+player1,"[('more_jumps_and_closer_to_enemy_base', 80)]",5202.691294193268,player2,"[('all_density_and_closer_to_enemy_base', 80)]",2039.013771533966
+player2,"[('more_jumps_and_closer_to_enemy_base', 80, 30), ('closer_to_enemy_base', 50, 15)]",1552.1353714466095,player1,"[('closer_to_enemy_base', 50, 100)]",916.3166103363037
+player2,"[('more_jumps_and_closer_to_enemy_base', 80, 20), ('density_and_closer_to_enemy_base', 90, 20)]",1332.5666382312775,player1,"[('closer_to_enemy_base', 50, 100)]",675.358962059021
+player2,"[('more_jumps_and_closer_to_enemy_base', 90, 20)]",1235.4127912521362,player1,"[('closer_to_enemy_base', 50, 100)]",885.1075277328491
+player2,"[('more_jumps_and_closer_to_enemy_base', 90, 20)]",83.64546585083008,player1,"[('closer_to_enemy_base', 50, 100)]",64.54605960845947
+player2,"[('more_jumps_and_closer_to_enemy_base', 80, 100)]",1861.6572279930115,player1,"[('all_density_and_closer_to_enemy_base', 90, 30), ('width', 50, 10)]",797.7472615242004

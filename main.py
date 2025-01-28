@@ -13,9 +13,9 @@ def log_game_result(filename, winner, winner_strategies, winner_playing_time, lo
         writer.writerow([winner, winner_strategies, winner_playing_time, looser, looser_strategies, looser_playing_time])
 
 
-board = GameBoard(filename='starting_board.csv')
-player1 = Player(player_number=1, actual_strategy=("closer_to_enemy_base", 80, 100))
-player2 = Player(player_number=2, actual_strategy=("closer_to_enemy_base", 80, 20), second_strategy=("width_and_closer_to_enemy_base", 80, 60))
+board = GameBoard(filename='small_board_start.csv', small=True)
+player1 = Player(player_number=1, actual_strategy=("all_density_and_closer_to_enemy_base", 90, 30), second_strategy=("width", 50, 10))
+player2 = Player(player_number=2, actual_strategy=("more_jumps_and_closer_to_enemy_base", 80, 100))
 
 game = Game(board)
 visited_nodes = game.play_game_exp(player1, player2, 3, algorithm_name='alfabeta')

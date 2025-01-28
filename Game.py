@@ -78,12 +78,12 @@ class Game:
                 enemy.isWin = True
                 return visited_nodes
             
-            if(round > 10):
+            if(round > 20):
                 depth = 2
             else:
                 depth = 3
             
-            if(round == 20):                
+            if(round == 30):                
                 round = 0
 
             current_player1.update_strategy()
